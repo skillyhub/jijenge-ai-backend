@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package product;
+
+
+option go_package = "github.com/jijengeai/jijengeai/systems/product/pb/gen";
+
+service ProductService {
+  rpc CreateFinancialInstitution(CreateFinancialInstitutionRequest) returns (CreateFinancialInstitutionResponse);
+  rpc CreateCriteria(CreateCriteriaRequest) returns (CreateCriteriaResponse);
+  rpc GetCriteriaById(GetCriteriaRequest) returns (GetCriteriaResponse);
+  rpc ListCriteriaByInstitutionId(ListCriteriaByInstitutionIdRequest) returns (ListCriteriaByInstitutionIdResponse);
+}
+
+message GetCriteriaRequest {
+  string institution_id =1;
+}
+message GetCriteriaResponse {
+  repeated Criteria criterias =1;
+}
+message Criteria {
+  string institution_id = 2; 
+  int32 number_of_transactions = 3; 
+  double total_amount = 4; 
+  double tax_paid = 5; 
+  repeated double frequent_amounts = 6;
+  double min_amount = 7;
+  double max_amount = 8;
+}
+message ListCriteriaByInstitutionIdRequest {
+  string institution_id = 1; 
+
+}
+message ListCriteriaByInstitutionIdResponse {
+  repeated Criteria criterias = 1;
+}
+message CreateCriteriaRequest {
+  Criteria criteria = 1;
+}
+message CreateCriteriaResponse{
+string criteriaId =1;
+}
+
+message CreateFinancialInstitutionRequest {
+  string name = 1; 
+}
+
+message CreateFinancialInstitutionResponse {
+  string institution = 1; 
+}

@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package finance;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/jijengeai/jijengeai/systems/business/pb/gen";
+
+service BusinessService {
+  rpc CreateBusiness(CreateBusinessRequest) returns (BusinessResponse);
+  rpc GetBusiness(GetBusinessRequest) returns (BusinessResponse);
+  rpc UpdateBusiness(UpdateBusinessRequest) returns (BusinessResponse);
+  rpc DeleteBusiness(DeleteBusinessRequest) returns (DeleteBusinessResponse);
+  rpc ListBusinesses(ListBusinessesRequest) returns (ListBusinessesResponse);
+  rpc SearchBusinesses(SearchBusinessesRequest) returns (ListBusinessesResponse);
+}
+
+enum BusinessType {
+  WHOLESALER = 0;
+  RETAILER = 1;
+  MANUFACTURER = 2;
+  SERVICE_PROVIDER = 3;
+  DISTRIBUTOR = 4;
+  ONLINE_STORE = 5;
+  FRANCHISE = 6;
+}
+
+message Business {
+  string id = 1;
+  string name = 2;
+  string reg_id = 3;
+  string email = 4;
+  string phone = 5;
+  BusinessType type = 6;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
+}
+
+message CreateBusinessRequest {
+  string name = 1;
+  string reg_id = 2;
+  string email = 3;
+  string phone = 4;
+  BusinessType type = 5;
+}
+
+message GetBusinessRequest {
+  string id = 1;
+}
+
+message UpdateBusinessRequest {
+  string id = 1;
+  string name = 2;
+  string email = 3;
+  string phone = 4;
+  BusinessType type = 5;
+}
+
+message DeleteBusinessRequest {
+  string id = 1;
+}
+
+message DeleteBusinessResponse {
+  bool success = 1;
+}
+
+message ListBusinessesRequest {
+  int32 offset = 1;
+  int32 limit = 2;
+}
+
+message ListBusinessesResponse {
+  repeated Business businesses = 1;
+  int32 total = 2;
+}
+
+message SearchBusinessesRequest {
+  string query = 1;
+}
+
+message BusinessResponse {
+  Business business = 1;
+}

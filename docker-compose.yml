@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  business:
+    build:
+      context: ./business
+    environment:
+      - GRPC_PORT=50051
+      - SERVICE_NAME=business
+    ports:
+      - "50051:50051"
+
+  finance:
+    build:
+      context: ./finance
+    environment:
+      - GRPC_PORT=50052
+      - SERVICE_NAME=finance
+    ports:
+      - "50052:50052"
+
+  products:
+    build:
+      context: ./products
+    environment:
+      - GRPC_PORT=50053
+      - SERVICE_NAME=products
+    ports:
+      - "50053:50053"
