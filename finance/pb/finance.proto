@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+package finance;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/jijengeai/jijengeai/systems/finance/pb/gen";
+
+service FinanceService {
+  rpc CreateFinance(CreateFinanceRequest) returns (CreateFinanceResponse) {}
+  rpc AddTransaction(AddTransactionRequest) returns (AddTransactionResponse) {}
+  rpc GetTransactions(GetTransactionsRequest) returns (GetTransactionsResponse) {}
+  rpc GetFinancialSummary(GetFinancialSummaryRequest) returns (GetFinancialSummaryResponse) {}
+  rpc TransferBetweenFinances(TransferBetweenFinancesRequest) returns (TransferBetweenFinancesResponse) {}
+}
+
+message CreateFinanceRequest {
+  string business_id = 1;
+  string finance_type = 2;
+  double initial_amount = 3;
+}
+
+message CreateFinanceResponse {
+  string finance_id = 1;
+  bool success = 2;
+}
+
+message AddTransactionRequest {
+  string business_id = 1;
+  string finance_type = 2;
+  double amount = 3;
+  string description = 4;
+}
+
+message AddTransactionResponse {
+  bool success = 1;
+}
+
+message GetTransactionsRequest {
+  string business_id = 1;
+  string finance_type = 2; 
+}
+
+message GetTransactionsResponse {
+  repeated Transaction transactions = 1;
+}
+
+message Transaction {
+  string id = 1;
+  string finance_type = 2;
+  double amount = 3;
+  string description = 4;
+  google.protobuf.Timestamp date = 5;
+}
+
+message GetFinancialSummaryRequest {
+  string business_id = 1;
+}
+
+message GetFinancialSummaryResponse {
+  double total_balance = 1;
+  double momo_balance = 2;
+  double bank_balance = 3;
+  int64 momo_transaction_count = 4;
+  int64 bank_transaction_count = 5;
+  repeated Transaction latest_transactions = 6;
+}
+
+message TransferBetweenFinancesRequest {
+  string business_id = 1;
+  string from_finance_type = 2;
+  string to_finance_type = 3;
+  double amount = 4;
+}
+
+message TransferBetweenFinancesResponse {
+  bool success = 1;
+}
