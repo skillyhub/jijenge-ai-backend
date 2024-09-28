@@ -7,8 +7,11 @@ services:
     environment:
       - GRPC_PORT=50051
       - SERVICE_NAME=business
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/jejengeai
     ports:
       - "50051:50051"
+    depends_on:
+      - db
 
   finance:
     build:
@@ -16,8 +19,11 @@ services:
     environment:
       - GRPC_PORT=50052
       - SERVICE_NAME=finance
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/jejengeai
     ports:
       - "50052:50052"
+    depends_on:
+      - db
 
   products:
     build:
@@ -25,5 +31,23 @@ services:
     environment:
       - GRPC_PORT=50053
       - SERVICE_NAME=products
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/jejengeai
     ports:
       - "50053:50053"
+    depends_on:
+      - db
+
+  db:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=jejengeai
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:

@@ -22,8 +22,10 @@ import (
 func main() {
 	logger := logrus.New()
 	logger.SetFormatter(&logrus.JSONFormatter{})
-
-	dbConnectionString := "host=localhost user=mac password= dbname=postgres port=5432 sslmode=disable"
+	dbConnectionString := os.Getenv("DATABASE_URL")
+	if dbConnectionString == "" {
+		logger.Fatalf("DATABASE_URL environment variable is not set")
+	}
 
 	db, err := gorm.Open(postgres.Open(dbConnectionString), &gorm.Config{})
 	if err != nil {
@@ -42,8 +44,6 @@ func main() {
 		logger.Fatalf("Failed to get database instance: %v", err)
 	}
 	sqlDB.Close()
-
-	dbConnectionString = "host=localhost user=mac password= dbname=jejengeai port=5432 sslmode=disable"
 
 	db, err = gorm.Open(postgres.Open(dbConnectionString), &gorm.Config{})
 	if err != nil {
