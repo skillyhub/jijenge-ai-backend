@@ -23,32 +23,26 @@ import (
 func main() {
 	logger := logrus.New()
 	logger.SetFormatter(&logrus.JSONFormatter{})
-
-	// First, connect to the default 'postgres' database
-	dbConnectionString := "host=localhost user=mac password= dbname=postgres port=5432 sslmode=disable"
-
+	dbConnectionString := os.Getenv("DATABASE_URL")
+	if dbConnectionString == "" {
+		logger.Fatalf("DATABASE_URL environment variable is not set")
+	}
 	db, err := gorm.Open(postgres.Open(dbConnectionString), &gorm.Config{})
 	if err != nil {
 		logger.Fatalf("Failed to connect to database: %v", err)
 	}
 	logger.Info("Connected to default database successfully...")
 
-	// Create the 'jejengeai' database if it doesn't exist
 	err = db.Exec("CREATE DATABASE jejengeai").Error
 	if err != nil {
-		// If the database already exists, this will throw an error, which we can ignore
 		logger.Info("Database 'jejengeai' may already exist: ", err)
 	}
 
-	// Close the connection to the 'postgres' database
 	sqlDB, err := db.DB()
 	if err != nil {
 		logger.Fatalf("Failed to get database instance: %v", err)
 	}
 	sqlDB.Close()
-
-	// Now connect to the 'jejengeai' database
-	dbConnectionString = "host=localhost user=mac password= dbname=jejengeai port=5432 sslmode=disable"
 
 	db, err = gorm.Open(postgres.Open(dbConnectionString), &gorm.Config{})
 	if err != nil {
